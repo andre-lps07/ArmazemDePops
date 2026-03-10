@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POPs</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rye&family=Zilla+Slab:wght@400;700&display=swap');
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  min-height: 100vh;
+  background-color: #1a1008;
+  --fonte-display: 'Rye', serif;
+  --fonte-corpo: 'Zilla Slab', serif;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px),
+    repeating-linear-gradient(0deg,  rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  font-family: 'Zilla Slab', serif;
+  padding: 30px 16px 60px;
+  cursor: default;
+}
+
+/* ── PLACA PRINCIPAL ── */
+.placa {
+  max-width: 980px;
+  margin: 0 auto;
+  background: #6b3f1a;
+  background-image:
+    repeating-linear-gradient(
+      92deg,
+      transparent 0px, transparent 18px,
+      rgba(0,0,0,0.08) 18px, rgba(0,0,0,0.08) 19px,
+      transparent 19px, transparent 38px,
+      rgba(255,255,255,0.03) 38px, rgba(255,255,255,0.03) 39px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 1px,
+      transparent 1px, transparent 6px
+    );
+  border: 6px solid #3a1e08;
+  outline: 3px solid #8a5a2a;
+  outline-offset: -10px;
+  box-shadow:
+    inset 0 0 60px rgba(0,0,0,0.45),
+    0 10px 40px rgba(0,0,0,0.7),
+    0 2px 0 #8a5a2a;
+  position: relative;
+}
+
+/* parafusos nos cantos */
+.placa::before, .placa::after {
+  content: '⬤';
+  position: absolute;
+  top: 12px;
+  font-size: 14px;
+  color: #5a3a18;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+  z-index: 10;
+}
+.placa::before { left: 14px; }
+.placa::after  { right: 14px; }
+.parafuso-b { display:flex; justify-content:space-between; padding: 0 14px; position:absolute; bottom:12px; width:100%; }
+.parafuso-b span { font-size:14px; color:#5a3a18; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+
+/* ── CABEÇALHO ── */
+.cabecalho {
+  padding: 28px 40px 22px;
+  border-bottom: 4px solid #3a1e08;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cabecalho::after {
+  content: '';
+  position: absolute;
+  bottom: -8px; left: 0; right: 0;
+  height: 3px;
+  background: rgba(255,200,100,0.08);
+}
+
+.titulo-bloco h1 {
+  font-family: 'Rye', serif;
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: #f2ead8;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  text-shadow: 3px 3px 0 #1a0800, 0 0 40px rgba(255,245,220,0.08);
+  line-height: 1;
+}
+
+.titulo-bloco .sub {
+  font-family: 'Zilla Slab', serif;
+  color: #c8b890;
+  font-size: 0.78rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  margin-top: 5px;
+}
+
+/* carimbo */
+.carimbo {
+  border: 4px solid #d4c8a0;
+  padding: 8px 14px;
+  transform: rotate(-4deg);
+  text-align: center;
+  position: relative;
+  opacity: 0.82;
+}
+
+.carimbo::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid #c8b888;
+  opacity: 0.4;
+}
+
+.carimbo .c-linha1 {
+  font-family: 'Rye', serif;
+  font-size: 0.6rem;
+  letter-spacing: 4px;
+  color: #d4c898;
+  text-transform: uppercase;
+}
+
+.carimbo .c-num {
+  font-family: 'Rye', serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #f5eed8;
+  line-height: 1;
+}
+
+.carimbo .c-linha2 {
+  font-family: 'Zilla Slab', serif;
+  font-size: 0.55rem;
+  letter-spacing: 3px;
+  color: #d4c898;
+  text-transform: uppercase;
+}
+
+/* ── BARRA DE FERRAMENTAS ── */
+.barra {
+  background: #3d2008;
+  border-bottom: 3px solid #2a1205;
+  padding: 14px 28px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,0.4);
+}
+
+.campo-busca {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  align-items: center;
+  background: #1a0e04;
+  border: 2px solid #5a3a18;
+  border-bottom-color: #b8a070;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.campo-busca input {
+  flex: 1;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Zilla Slab', serif;
+  font-size: 0.88rem;
+  color: #e8ddc8;
+}
+
+.campo-busca input::placeholder { color: #7a6040; }
+.lupa { padding: 8px 10px; color: #6a4a28; font-size: 1rem; }
+
+.botao {
+  padding: 9px 22px;
+  background: #1a0e04;
+  border: 2px solid #8a6030;
+  border-bottom: 3px solid #5a3818;
+  font-family: 'Rye', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #f2ead8;
+  cursor: pointer;
+  transition: all 0.1s;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.botao:hover {
+  background: #2a1808;
+  border-color: #f2ead8;
+  color: #fff8d0;
+}
+
+.botao:active {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+}
+
+/* ── CONTEÚDO ── */
+.conteudo {
+  padding: 28px 28px 36px;
+}
+
+.secao-titulo {
+  font-family: 'Rye', serif;
+  font-size: 0.75rem;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: #b8a070;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.secao-titulo::before, .secao-titulo::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #5a3a18, transparent);
+}
+
+.badge {
+  background: #7a3018;
+  color: #fff8d0;
+  font-family: 'Rye', serif;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  padding: 2px 8px;
+  border: 1px solid #8b2010;
+}
+
+/* ── GRADE DE FICHAS ── */
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+/* cada ficha parece um papel pregado na madeira */
+.ficha {
+  background: #e8d8a0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+  border: 1px solid #b89860;
+  position: relative;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow:
+    3px 5px 12px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+/* tachinha */
+.ficha::before {
+  content: '●';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  color: #888;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.7), 0 0 2px rgba(255,255,255,0.2);
+  z-index: 2;
+}
+
+/* linha amarelada no topo */
+.ficha::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, #c8a840 0px, #c8a840 4px, transparent 4px, transparent 8px);
+  opacity: 0.5;
+}
+
+.ficha:hover {
+  transform: translateY(-3px) rotate(0.5deg);
+  box-shadow: 5px 10px 20px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+.ficha-corpo {
+  padding: 18px 14px 12px;
+}
+
+.ficha-titulo {
+  font-family: 'Zilla Slab', serif;
+  font-size: 0.95rem;
+  color: #1a0c04;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  word-break: break-word;
+  /* linhas de caderno */
+  background-image: repeating-linear-gradient(transparent, transparent 19px, rgba(100,70,30,0.15) 19px, rgba(100,70,30,0.15) 20px);
+  padding-bottom: 4px;
+  min-height: 40px;
+}
+
+.ficha-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: #7a5028;
+  border-top: 1px dashed #b89060;
+  padding-top: 7px;
+  font-family: 'Zilla Slab', serif;
+}
+
+.ficha-rodape {
+  background: #d4c080;
+  background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 10px);
+  border-top: 1px solid #b89060;
+  padding: 9px 12px;
+  display: flex;
+  gap: 7px;
+}
+
+.ficha-btn {
+  flex: 1;
+  padding: 6px 4px;
+  background: #1a0e04;
+  border: 1px solid #5a3818;
+  border-bottom: 2px solid #3a1e08;
+  font-family: 'Rye', serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #f2ead8;
+  cursor: pointer;
+  transition: all 0.1s;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+
+.ficha-btn:hover { background: #2e1a08; color: #f2ead8; border-color: #c8a040; }
+.ficha-btn:active { transform: translateY(1px); border-bottom-width: 1px; }
+
+.ficha-del {
+  padding: 6px 9px;
+  background: transparent;
+  border: 1px solid #8b2010;
+  color: #b05030;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.1s;
+}
+
+.ficha-del:hover { background: #7a3018; color: #f5eed8; }
+
+/* ── VAZIO ── */
+.vazio {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 60px 20px;
+  color: #5a3a18;
+}
+
+.vazio .icon { font-size: 3.5rem; opacity: 0.35; margin-bottom: 14px; filter: sepia(1); }
+.vazio p { font-size: 0.9rem; line-height: 1.8; }
+
+/* ── MODAL ── */
+.modal-fundo {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(5,2,0,0.88);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-fundo.aberto { display: flex; }
+
+.modal {
+  background: #d8c888;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  border: 2px solid #8a6020;
+  box-shadow: 8px 8px 0 #3a1e08, 12px 12px 30px rgba(0,0,0,0.7);
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+}
+
+.modal-cabecalho {
+  background: #3a1e08;
+  padding: 14px 18px;
+  border-bottom: 3px solid #1a0e04;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-cabecalho h2 {
+  font-family: 'Rye', serif;
+  font-size: 1rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: #f2ead8;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.modal-fechar {
+  background: none;
+  border: 1px solid #5a3818;
+  color: #a07030;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 2px 8px;
+  line-height: 1;
+  font-family: 'Zilla Slab', serif;
+}
+
+.modal-fechar:hover { border-color: #b05030; color: #b05030; }
+
+.modal-corpo { padding: 22px 20px 16px; }
+
+.campo { margin-bottom: 18px; }
+
+.campo label {
+  display: block;
+  font-family: 'Rye', serif;
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #5a3818;
+  margin-bottom: 6px;
+}
+
+.campo input {
+  width: 100%;
+  padding: 9px 11px;
+  background: #f5ead8;
+  border: 1px solid #8a6030;
+  border-bottom: 2px solid #5a3818;
+  font-family: 'Zilla Slab', serif;
+  font-size: 0.95rem;
+  color: #2a1205;
+  outline: none;
+  background-image: repeating-linear-gradient(transparent, transparent 23px, rgba(100,70,30,0.12) 23px, rgba(100,70,30,0.12) 24px);
+}
+
+.zona-drop {
+  border: 3px dashed #8a6030;
+  padding: 26px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(100,60,10,0.05);
+}
+
+.zona-drop:hover, .zona-drop.arrastando { border-color: #b05030; background: rgba(140,60,20,0.06); }
+.zona-drop .dz-icon { font-size: 2.5rem; margin-bottom: 6px; opacity: 0.6; }
+.zona-drop p { font-size: 0.82rem; color: #7a5028; }
+
+.arquivo-ok {
+  display: none;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(60,30,5,0.1);
+  border-left: 3px solid #b05030;
+  font-size: 0.8rem;
+  color: #3a1e08;
+  word-break: break-all;
+}
+
+.arquivo-ok.visivel { display: block; }
+
+.modal-rodape {
+  padding: 12px 20px 18px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  border-top: 1px dashed #8a6030;
+}
+
+input[type="file"] { display:none; }
+
+/* ── RODAPÉ ── */
+.rodape-site {
+  text-align: center;
+  padding: 18px;
+  background: #2a1205;
+  border-top: 3px solid #1a0e04;
+  font-family: 'Rye', serif;
+  font-size: 0.6rem;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: #7a6040;
+}
+
+@media (max-width: 580px) {
+  .titulo-bloco h1 { font-size: 2rem; }
+  .cabecalho { flex-direction: column; }
+  .grade { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="placa">
+
+  <!-- parafusos inferiores -->
+  <div class="parafuso-b"><span>⬤</span><span>⬤</span></div>
+
+  <!-- CABEÇALHO -->
+  <div class="cabecalho">
+    <div class="titulo-bloco">
+      <h1>Arquivo de POPs</h1>
+      <div class="sub">— Procedimentos Operacionais Padrão —</div>
+    </div>
+    <div class="carimbo">
+      <span class="c-linha1">Arquivo</span>
+      <span class="c-num" id="totalCount">0</span>
+      <span class="c-linha2">Documentos</span>
+    </div>
+  </div>
+
+  <!-- BARRA -->
+  <div class="barra">
+    <div class="campo-busca">
+      <span class="lupa">🔍</span>
+      <input type="text" id="buscaInput" placeholder="buscar pelo nome do POP..." oninput="filtrar()">
+    </div>
+  
+  </div>
+
+  <!-- CONTEÚDO -->
+  <div class="conteudo">
+    <div class="secao-titulo">
+      <span id="contadorVis">0 documentos</span>
+      <span class="badge">USO INTERNO</span>
+    </div>
+    <div class="grade" id="grade">
+      <div class="vazio" id="carregando">
+        <div class="icon">📋</div>
+        <p>Carregando arquivo...</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="rodape-site">
+    Arquivo de POPs &nbsp;·&nbsp; Uso Interno &nbsp;·&nbsp; Todos os Direitos Reservados
+  </div>
+</div>
+
+
+<script>
+// ── POPs — adicione novos aqui ─────────────────────
+// Coloque os PDFs na pasta frontend/pdfs/ com o mesmo nome do arquivo abaixo
+let todosPops = [
+  { id: 1, titulo: "POP - VIABILIDADE",                    arquivo: "POP - VIABILIDADE.pdf.pdf",                    data: "05/03/2026", tamanho: 204800 },
+  { id: 2, titulo: "POP - EXCLUSÃO DE ONU",                arquivo: "POP - EXCLUSAO-DE-ONU.pdf",                data: "05/03/2026", tamanho: 204800 },
+  { id: 3, titulo: "POP - ACEITE DE ONU",                  arquivo: "POP - ACEITE-DE-ONU-DE-CLIENTE-ATIVO.pdf", data: "05/03/2026", tamanho: 204800 },
+  { id: 4, titulo: "POP - VALIDAÇÃO DE CTO PELO RAVI",     arquivo: "POP - VALIDACAO-DE-CTO-PELO-RAVI.pdf",     data: "05/03/2026", tamanho: 204800 },
+];
+
+// ── Render ─────────────────────────────────────────
+function renderizar(lista) {
+  const g = document.getElementById('grade');
+  document.getElementById('contadorVis').textContent = lista.length + ' documento' + (lista.length!==1?'s':'');
+  document.getElementById('totalCount').textContent  = todosPops.length;
+
+  if (!lista.length) {
+    g.innerHTML = `<div class="vazio"><div class="icon">📋</div><p>Nenhum POP encontrado.</p></div>`;
+    return;
+  }
+
+  g.innerHTML = lista.map(p => `
+    <div class="ficha">
+      <div class="ficha-corpo">
+        <div class="ficha-titulo">${p.titulo}</div>
+        <div class="ficha-meta">
+          <span>📅 ${p.data}</span>
+          <span>📄 PDF</span>
+        </div>
+      </div>
+      <div class="ficha-rodape">
+        <button class="ficha-btn" onclick="abrirPDF('${p.arquivo}')">👁 Abrir</button>
+        <button class="ficha-btn" onclick="baixarPDF('${p.arquivo}','${p.titulo.replace(/'/g,"\\'")}')">⬇ Baixar</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filtrar() {
+  const q = document.getElementById('buscaInput').value.toLowerCase();
+  renderizar(todosPops.filter(p => !q || p.titulo.toLowerCase().includes(q)));
+}
+
+// ── Ações ──────────────────────────────────────────
+function abrirPDF(arquivo) {
+  const url = `/pdfs/${arquivo}`;
+  const w = window.open('', '_blank');
+  w.document.write(`
+    <html><head><title>POP</title></head>
+    <body style="margin:0;padding:0;background:#222;">
+      <iframe src="${url}" width="100%" height="100%" style="border:none;position:fixed;top:0;left:0;width:100%;height:100%;"></iframe>
+    </body></html>
+  `);
+  w.document.close();
+}
+
+function baixarPDF(arquivo, titulo) {
+  const a = Object.assign(document.createElement('a'), {
+    href: `/pdfs/${arquivo}`,
+    download: titulo + '.pdf'
+  });
+  a.click();
+}
+
+// ── Init ───────────────────────────────────────────
+renderizar(todosPops);
+</script>
+</body>
+</html>

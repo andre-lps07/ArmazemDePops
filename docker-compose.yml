@@ -1,0 +1,58 @@
+version: '3.9'
+
+services:
+
+  db:
+    image: postgres:16-alpine
+    container_name: pops_db
+    restart: always
+    environment:
+      POSTGRES_DB: popsdb
+      POSTGRES_USER: popsuser
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./api/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - pops_net
+
+  api:
+    build: ./api
+    container_name: pops_api
+    restart: always
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: popsdb
+      DB_USER: popsuser
+      DB_PASSWORD: ${DB_PASSWORD}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      PORT: 3000
+    volumes:
+      - pdfs_data:/app/uploads
+    depends_on:
+      - db
+    networks:
+      - pops_net
+
+  nginx:
+    image: nginx:alpine
+    container_name: pops_nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+    networks:
+      - pops_net
+
+volumes:
+  db_data:
+  pdfs_data:
+
+networks:
+  pops_net:
+    driver: bridge
